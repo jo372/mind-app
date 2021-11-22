@@ -3,7 +3,7 @@ import PinInput from './components/pin/PinInput';
 
 function App() {
   return (
-    <PinInput />
+    <PinInput onSubmit={(val: string) => console.log(val)}/>
   );
 }
 
