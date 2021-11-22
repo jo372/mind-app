@@ -46,21 +46,33 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         if(input.length > 0) setInput(input.slice(0, input.length - 1));
     }
 
+    const clearInput = () => {
+        setInput("");
+    }
     const onSubmit = () => {
         if(props.onSubmit) {
             const hashed_input = Crypto.createSha512Hash(input);
             props.onSubmit(hashed_input);
+            clearInput();
         }
     }
 
     return <div className="pin-input">
         <div className="pin-display-screen">
             <input className="pin-input-display disable-text-select" type="text" disabled/>
-            <PinButton id="pin_button_backspace" onClick={eraseLastPinEntry}><BsBackspace/></PinButton>
+            <PinButton 
+                id="pin_button_backspace" 
+                onClick={eraseLastPinEntry}>
+                    <BsBackspace/>
+            </PinButton>
         </div>
         <div className="pin-buttons">
             { createPinButtons() }
-            <PinButton id="pin_button_enter" onClick={onSubmit}><AiOutlineEnter/></PinButton>
+            <PinButton 
+                id="pin_button_enter" 
+                onClick={onSubmit}>
+                    <AiOutlineEnter/>
+            </PinButton>
         </div>
     </div>
 }
