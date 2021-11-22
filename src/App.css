@@ -21,6 +21,9 @@ html, body {
   border-left: 1px solid #ccc;
 }
 
+.pin-input-display {
+  display:block;
+}
 
 /* Mobile first queries */
 
