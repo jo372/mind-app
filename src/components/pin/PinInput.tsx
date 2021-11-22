@@ -18,16 +18,19 @@ const PinInput : React.FC<PinInputProps> = (props) => {
     useEffect(() => {
         const body = document.body;
         const isNumber = (num: string) : boolean => {
-            return num.match("/\d+/g") != null;
+            return num.match(/\d+/g) != null;
         }
-        const onKeyDown = (e: KeyboardEvent) => {
-            console.log(e.key, isNumber("" + e.key));
+        const onKeyDown = ({key}: KeyboardEvent) => {
+            if(isNumber(key)) {
+                const pinKey : HTMLButtonElement | null = document.querySelector(`#pin_button_${key}`);
+                if(pinKey) pinKey.click();
+            }
         }
         body.addEventListener("keydown", onKeyDown);
         return () =>  body.removeEventListener('keydown', onKeyDown);
     })
     const createPinButtons = () : JSX.Element[] => {
-        const buttons : JSX.Element[] = new Array();
+        const buttons : JSX.Element[] = [];
         for(let i=0; i < 10; i++) {
             buttons.push(<PinButton id={`pin_button_${i}`} key={`pin_button_${i}`} text={i} onClick={(e) => {
                 const target = e.target as HTMLButtonElement;
@@ -37,8 +40,10 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         return buttons.reverse();
     }
     return <div className="pin-input">
-        <input className="pin-input-display" type="text" disabled/>
-        { createPinButtons() }
+        <input className="pin-input-display disable-text-select" type="text" disabled/>
+        <div className="pin_buttons">
+            { createPinButtons() }
+        </div>
     </div>
 }
 
