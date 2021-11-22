@@ -19,10 +19,18 @@ html, body {
   height: 50px;
   border-bottom: 1px solid #ccc;
   border-left: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pin-btn:hover {
+  background-color:#e1e0e0;
 }
 
 .pin-input-display {
   display:block;
+  width: 100%;
+  border:0;
+  height: 50px;
 }
 
 /* Mobile first queries */
