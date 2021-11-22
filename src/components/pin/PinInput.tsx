@@ -15,10 +15,21 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         }
     }, [input]);
 
+    useEffect(() => {
+        const body = document.body;
+        const isNumber = (num: string) : boolean => {
+            return num.match("/\d+/g") != null;
+        }
+        const onKeyDown = (e: KeyboardEvent) => {
+            console.log(e.key, isNumber("" + e.key));
+        }
+        body.addEventListener("keydown", onKeyDown);
+        return () =>  body.removeEventListener('keydown', onKeyDown);
+    })
     const createPinButtons = () : JSX.Element[] => {
         const buttons : JSX.Element[] = new Array();
         for(let i=0; i < 10; i++) {
-            buttons.push(<PinButton key={`pin_button_${i}`} text={i} onClick={(e) => {
+            buttons.push(<PinButton id={`pin_button_${i}`} key={`pin_button_${i}`} text={i} onClick={(e) => {
                 const target = e.target as HTMLButtonElement;
                 setInput(input + target.innerText)
             }}/>);
