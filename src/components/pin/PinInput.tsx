@@ -13,7 +13,7 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         return buttons.reverse();
     }
     return <div className="pin-input">
-        <input className="pin__input__display" type="text"/>
+        <input className="pin-input-display" type="text"/>
         { createPinButtons() }
     </div>
 }
