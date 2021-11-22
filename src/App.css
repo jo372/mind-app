@@ -40,6 +40,18 @@ html, body {
   display:flex;
 }
 
+#pin_button_0 {
+  width: calc(100%/1.5);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.error {
+  color: red;
+}
+
 .disable-text-select {
   -webkit-user-select: none;  
   -moz-user-select: none;    
