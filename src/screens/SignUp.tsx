@@ -12,7 +12,7 @@ const SignUp : React.FC<SignUpProps> = (props) => {
     const checkPinEntriesMatch = (secondPinEntry: string) => {
         const match = firstPinEntry === secondPinEntry;
         if(!match) {
-            setError("Pin's do not match, please try again.");
+            setError("Pins do not match, please try again.");
             setFirstPinEntry("");
         } else {
             setError("");
