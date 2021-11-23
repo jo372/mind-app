@@ -3,38 +3,56 @@ import './App.css';
 import PinConfirmation from './components/pin/PinConfirmation';
 import CustomStorage from './lib/CustomStorage';
 import Key from './lib/Key';
-import SignUp from './screens/SignUp';
-import UserHome from './screens/UserHome';
+import SignUpScreen from './screens/SignUp';
+import UnAuthorizedAccessScreen from './screens/UnauthorizedAccess';
+import UserHomeScreen from './screens/UserHome';
 
 function App() {
   const [hasPin, setHasPin] = useState<boolean>(false);
-  const [isLoggedIn, setLoggedInStatus] = useState<boolean>(false);
-
+  const [authorized, setAuthorizedStatus] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   useEffect(() => {
       setHasPin(CustomStorage.hasKey(Key.PIN));
   }, [setHasPin]);
 
   const showSetupScreen = () => {
-    return <SignUp onComplete={(hashed_pin) => {
+    return <SignUpScreen onComplete={(hashed_pin) => {
       CustomStorage.setKeyValue(Key.PIN, hashed_pin);
       setHasPin(true);
-      setLoggedInStatus(true);
+      setAuthorizedStatus(true);
     }}/>;
   }
 
   const showUserHomeScreen = () => {
-    return <UserHome/>
+    return <UserHomeScreen/>
+  }
+
+  const resetToDefault = () => {
+    setAuthorizedStatus(false);
+    setError(false);
+  }
+
+  const showUnauthorizedAccessScreen = () => {
+    return <UnAuthorizedAccessScreen onClick={resetToDefault}/>
   }
 
   const askForPinConfirmation = () => {
-    return <PinConfirmation 
-      onSuccess={() => setLoggedInStatus(true) } 
-      onFailure={() => console.log("Unauthorized Access")}
-    />
+    return <PinConfirmation onSuccess={() => setAuthorizedStatus(true) } onFailure={() => { setError(true)}}/>
   }
-  return (
-      !hasPin ? showSetupScreen() : !isLoggedIn ? askForPinConfirmation() : showUserHomeScreen()
-  );
+
+  // return (
+  //     !hasPin ? showSetupScreen() : !authorized ? askForPinConfirmation() : showUserHomeScreen()
+  // );
+
+
+  if(!hasPin) return showSetupScreen();
+  if(!authorized && !error) {
+    return askForPinConfirmation();
+  } else if(!authorized && error) {
+    return showUnauthorizedAccessScreen();
+  }
+
+  return showUserHomeScreen();
 }
 
 export default App;
