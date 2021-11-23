@@ -1,4 +1,4 @@
 const ShowLogEntriesScreen = () => {
-    return <></>
+    return <><p>Show Log Entry Screen</p></>
 }
 export default ShowLogEntriesScreen;
