@@ -23,7 +23,7 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLocaleLowerCase();
             const pinKey : HTMLButtonElement | null = document.querySelector(`#pin_button_${key}`);
-            if(pinKey) pinKey.click();
+            pinKey?.click();
         }
         body.addEventListener("keydown", onKeyDown);
         return () =>  body.removeEventListener('keydown', onKeyDown);
