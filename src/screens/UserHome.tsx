@@ -1,7 +1,7 @@
 import { BiMessageAdd } from "react-icons/bi";
 import { CgTranscript } from "react-icons/cg";
 
-const UserHome = () => {
+const UserHomeScreen = () => {
     return <div className="user-home">
         <div className="left-column">
             <div className="content">
@@ -18,4 +18,4 @@ const UserHome = () => {
     </div>;
 }
 
-export default UserHome;
+export default UserHomeScreen;
