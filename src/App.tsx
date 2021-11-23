@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
       setHasPin(CustomStorage.hasKey(Key.PIN));
-  });
+  }, [setHasPin]);
 
   const showSetupScreen = () => {
     return <SignUp onComplete={(hashed_pin) => {
