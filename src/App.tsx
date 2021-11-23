@@ -3,7 +3,7 @@ import SignUp from './screens/SignUp';
 
 function App() {
   return (
-    <SignUp/>
+    <SignUp onComplete={(hashed_pin) => console.log(hashed_pin)}/>
   );
 }
 
