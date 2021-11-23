@@ -23,6 +23,9 @@ const PinInput : React.FC<PinInputProps> = (props) => {
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLocaleLowerCase();
 
+            // if the enter key is press and it's blank, early return.
+            if(key === "enter" && input === "") return;
+
             const pinKey : HTMLButtonElement | null = document.querySelector(`#pin_button_${key}`);
             if(pinKey) pinKey.click();
         }
@@ -49,6 +52,7 @@ const PinInput : React.FC<PinInputProps> = (props) => {
     const clearInput = () => {
         setInput("");
     }
+
     const onSubmit = () => {
         if(props.onSubmit) {
             const hashed_input = Crypto.createSha512Hash(input);
