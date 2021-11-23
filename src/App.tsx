@@ -4,6 +4,7 @@ import PinConfirmation from './components/pin/PinConfirmation';
 import CustomStorage from './lib/CustomStorage';
 import Key from './lib/Key';
 import SignUp from './screens/SignUp';
+import UserHome from './screens/UserHome';
 
 function App() {
   const [hasPin, setHasPin] = useState<boolean>(false);
@@ -17,21 +18,22 @@ function App() {
     return <SignUp onComplete={(hashed_pin) => {
       CustomStorage.setKeyValue(Key.PIN, hashed_pin);
       setHasPin(true);
+      setLoggedInStatus(true);
     }}/>;
   }
 
   const showUserHomeScreen = () => {
-    return <p>Successfully registered :)</p>;
+    return <UserHome/>
   }
 
   const askForPinConfirmation = () => {
     return <PinConfirmation 
-      onSuccess={() => console.log("Access Granted") } 
+      onSuccess={() => setLoggedInStatus(true) } 
       onFailure={() => console.log("Unauthorized Access")}
     />
   }
   return (
-      !hasPin ? showSetupScreen() : askForPinConfirmation()
+      !hasPin ? showSetupScreen() : !isLoggedIn ? askForPinConfirmation() : showUserHomeScreen()
   );
 }
 
