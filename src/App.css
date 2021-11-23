@@ -59,6 +59,16 @@ html, body {
   user-select: none;
 }
 
+.pin-entry-screen span {
+  display:block;
+  margin:0;
+}
+
+.pin-entry-screen span.error {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
 /* Mobile first queries */
 
 /* Larger than mobile */
