@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PinButton from "./PinButton";
 import { BsBackspace } from "react-icons/bs";
 import { AiOutlineEnter } from "react-icons/ai";
-import Crypto from "../../lib/crypto";
+import Crypto from "../../lib/Crypto";
 
 interface PinInputProps {
     onSubmit?: (hashedPin: string) => void;
@@ -10,7 +10,7 @@ interface PinInputProps {
 
 const PinInput : React.FC<PinInputProps> = (props) => {
     const [input, setInput] = useState<string>("");
-
+    
     useEffect(() => {
         const node : HTMLInputElement | null = document.querySelector('.pin-input-display');
         if(node) {
