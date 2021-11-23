@@ -27,6 +27,10 @@ html, body {
   background-color:#e1e0e0;
 }
 
+.pin-btn.active {
+  background-color: #cecdcc;
+}
+
 .pin-input-display {
   display:block;
   width: calc(100%/1.5);
