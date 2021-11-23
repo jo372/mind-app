@@ -1,5 +1,5 @@
 const AddLogEntryScreen = () => {
-    return <></>
+    return <><p>Add Log Entry Screen</p></>
 }
 
 export default AddLogEntryScreen;
