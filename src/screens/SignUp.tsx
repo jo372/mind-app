@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PinInput from "../components/pin/PinInput";
 
 interface SignUpProps {
-    onComplete ?: (hashed_pin: string) => void
+    onComplete: (hashed_pin: string) => void
 }
 
 const SignUp : React.FC<SignUpProps> = (props) => {
@@ -16,8 +16,8 @@ const SignUp : React.FC<SignUpProps> = (props) => {
             setFirstPinEntry("");
         } else {
             setError("");
+            props.onComplete(secondPinEntry);
         }
-
     }
 
     const displayFirstScreen = () => {
@@ -28,8 +28,19 @@ const SignUp : React.FC<SignUpProps> = (props) => {
         return <PinInput onSubmit={(hashed_pin) => checkPinEntriesMatch(hashed_pin)}></PinInput>;
     }
 
-    return <div className="pin-entry-scrreen">
-        <p className="text-center error">{error}</p>
+    useEffect(() => {
+        const span : HTMLSpanElement | null = document.querySelector('.pin-entry-screen span');
+        if(span) {
+            if(error) {
+                span.classList.add("error");
+            } else {
+                span.classList.remove("error");
+            }
+        }
+    }, [error]);
+
+    return <div className="pin-entry-screen">
+        <span className="text-center">{error}</span>
         {
             firstPinEntry === "" ?  displayFirstScreen(): displaySecondScreen()
         }
