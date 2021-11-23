@@ -41,11 +41,10 @@ function App() {
   }
 
   if(!hasPin) return showSetupScreen();
-  if(!authorized && !error) {
-    return askForPinConfirmation();
-  } else if(!authorized && error) {
+  if(!authorized) {
+    if(!error) return askForPinConfirmation();
     return showUnauthorizedAccessScreen();
-  }
+  } 
 
   return showUserHomeScreen();
 }
