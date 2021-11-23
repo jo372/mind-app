@@ -15,10 +15,10 @@ const PinConfirmation : React.FC<PinConfirmationProps> = ({onSuccess, onFailure}
 
     return <PinInput onSubmit={(hashed_pin) => {
         if(onSuccess || onFailure) {
-            const valid = isPinValid(hashed_pin);
-            if(valid && onSuccess) {
+            const validPin = isPinValid(hashed_pin);
+            if(validPin && onSuccess) {
                 onSuccess();
-            } else if(!valid && onFailure) {
+            } else if(!validPin && onFailure) {
                 onFailure();
             }
         }
