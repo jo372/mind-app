@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import PinInput from "../components/pin/PinInput";
 
-interface SignUpProps {
+interface SignUpScreenProps {
     onComplete: (hashed_pin: string) => void
 }
 
-const SignUp : React.FC<SignUpProps> = (props) => {
+const SignUpScreen : React.FC<SignUpScreenProps> = (props) => {
     const [firstPinEntry, setFirstPinEntry] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
@@ -47,4 +47,4 @@ const SignUp : React.FC<SignUpProps> = (props) => {
     </div>;
 }
 
-export default SignUp;
+export default SignUpScreen;
