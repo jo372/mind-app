@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PinButton from "./PinButton";
 import { BsBackspace } from "react-icons/bs";
 import { AiOutlineEnter } from "react-icons/ai";
-import Crypto from "../../lib/Crypto";
+import CryptoHelper from "../../lib/CryptoHelper";
 
 interface PinInputProps {
     onSubmit?: (hashedPin: string) => void;
@@ -55,7 +55,7 @@ const PinInput : React.FC<PinInputProps> = (props) => {
 
     const onSubmit = () => {
         if(props.onSubmit) {
-            const hashed_input = Crypto.createSha512Hash(input);
+            const hashed_input = CryptoHelper.createSha512Hash(input);
             props.onSubmit(hashed_input);
             clearInput();
         }
