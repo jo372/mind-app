@@ -1,5 +1,5 @@
 interface UnAuthorizedAccessScreenProps {
-    onClick ?: () => void
+    onClick : () => void
 }
 
 const UnAuthorizedAccessScreen : React.FC<UnAuthorizedAccessScreenProps> = ({onClick}) => {
