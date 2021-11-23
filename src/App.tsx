@@ -40,11 +40,6 @@ function App() {
     return <PinConfirmation onSuccess={() => setAuthorizedStatus(true) } onFailure={() => { setError(true)}}/>
   }
 
-  // return (
-  //     !hasPin ? showSetupScreen() : !authorized ? askForPinConfirmation() : showUserHomeScreen()
-  // );
-
-
   if(!hasPin) return showSetupScreen();
   if(!authorized && !error) {
     return askForPinConfirmation();
