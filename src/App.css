@@ -35,7 +35,7 @@ html, body {
   background-color:#e1e0e0;
 }
 
-.pin-btn.active {
+.active {
   background-color: #cecdcc;
 }
 
@@ -97,7 +97,6 @@ html, body {
   position:relative;
   border:1px solid #ccc;
   height:100%;
-  background-color: #fffafa;
   width:98%;
   margin:5px;
   text-align: center;
