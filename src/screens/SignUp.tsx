@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import PinInput from "../components/pin/PinInput";
+import CustomRoutes from "../lib/CustomRoutes";
+import CustomStorage from "../lib/CustomStorage";
+import Key from "../lib/Key";
 
-interface SignUpScreenProps {
-    onComplete: (hashed_pin: string) => void
-}
-
-const SignUpScreen : React.FC<SignUpScreenProps> = (props) => {
+const SignUpScreen = () => {
     const [firstPinEntry, setFirstPinEntry] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
-
+    const navigate = useNavigate();
+    
     const checkPinEntriesMatch = (secondPinEntry: string) => {
         const match = firstPinEntry === secondPinEntry;
         if(!match) {
@@ -16,7 +17,8 @@ const SignUpScreen : React.FC<SignUpScreenProps> = (props) => {
             setFirstPinEntry("");
         } else {
             setError("");
-            props.onComplete(secondPinEntry);
+            CustomStorage.setKeyValue(Key.PIN, secondPinEntry);
+            navigate(CustomRoutes.HOME, { replace: true });
         }
     }
 
@@ -39,8 +41,9 @@ const SignUpScreen : React.FC<SignUpScreenProps> = (props) => {
         }
     }, [error]);
 
-    return <div className="pin-entry-screen">
-        <span className="text-center">{error}</span>
+    return <div className="pin-entry-screen container text-center">
+        <h1>Setup Pin</h1>
+        <span>{error}</span>
         {
             firstPinEntry === "" ?  displayFirstScreen(): displaySecondScreen()
         }
