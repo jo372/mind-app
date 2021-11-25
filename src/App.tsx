@@ -1,52 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import './App.css';
-import PinConfirmation from './components/pin/PinConfirmation';
+import CustomRoutes from './lib/CustomRoutes';
 import CustomStorage from './lib/CustomStorage';
 import Key from './lib/Key';
-import SignUpScreen from './screens/SignUp';
-import UnAuthorizedAccessScreen from './screens/UnauthorizedAccess';
-import UserHomeScreen from './screens/UserHome';
 
 function App() {
-  const [hasPin, setHasPin] = useState<boolean>(false);
-  const [authorized, setAuthorizedStatus] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const navigate = useNavigate();
+  
+  // when the application has initial loaded, we'll check if the user has a key or not.
   useEffect(() => {
-      setHasPin(CustomStorage.hasKey(Key.PIN));
-  }, [setHasPin]);
+    const { 
+      REGISTER, 
+      LOGIN
+    } = CustomRoutes;
 
-  const showSetupScreen = () => {
-    return <SignUpScreen onComplete={(hashed_pin) => {
-      CustomStorage.setKeyValue(Key.PIN, hashed_pin);
-      setHasPin(true);
-      setAuthorizedStatus(true);
-    }}/>;
-  }
+    const showSetupScreen = () => navigate(REGISTER);
+    const showLoginScreen = () => navigate(LOGIN);
+    
+    const hasPin = CustomStorage.hasKey(Key.PIN);
 
-  const showUserHomeScreen = () => {
-    return <UserHomeScreen/>
-  }
+    !hasPin ? showSetupScreen() : showLoginScreen()
+  });
 
-  const resetToDefault = () => {
-    setAuthorizedStatus(false);
-    setError(false);
-  }
-
-  const showUnauthorizedAccessScreen = () => {
-    return <UnAuthorizedAccessScreen onClick={resetToDefault}/>
-  }
-
-  const askForPinConfirmation = () => {
-    return <PinConfirmation onSuccess={() => setAuthorizedStatus(true) } onFailure={() => { setError(true)}}/>
-  }
-
-  if(!hasPin) return showSetupScreen();
-  if(!authorized) {
-    if(!error) return askForPinConfirmation();
-    return showUnauthorizedAccessScreen();
-  } 
-
-  return showUserHomeScreen();
+  return null;
 }
 
 export default App;
