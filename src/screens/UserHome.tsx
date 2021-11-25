@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BiMessageAdd } from "react-icons/bi";
 import { CgTranscript } from "react-icons/cg";
-import AddLogEntryScreen from "./AddLogEntry";
-import ShowLogEntriesScreen from "./ShowLogEntries";
-
-enum Section {
-    VIEW_ENTRIES,
-    WRITE_ENTRY 
-}
+import { useNavigate } from "react-router";
+import CustomRoutes from "../lib/CustomRoutes";
+import CustomStorage from "../lib/CustomStorage";
+import Key from "../lib/Key";
 
 const UserHomeScreen = () => {
-    const [section, setSection] = useState<Section | null>(null);
-    const { VIEW_ENTRIES, WRITE_ENTRY } = Section;
     
+    const navigate = useNavigate();
+
     useEffect(() => { 
+
+        if(CustomStorage.getValueByKey(Key.AUTHENTICATED) === "false") navigate(CustomRoutes.LOGIN);
+
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLowerCase();
             let el : HTMLDivElement | null = document.querySelector(key === "arrowleft" ? '.left-column' : '.right-column');
@@ -31,25 +31,17 @@ const UserHomeScreen = () => {
         return () => body.removeEventListener('keydown', onKeyDown);
     });
 
-    const showViewEntriesScreen = () => {
-        return <ShowLogEntriesScreen/>
-    }
-
-    const showAddLogEntryScreen = () => {
-        return <AddLogEntryScreen/>
-    }
-
-    if(section === VIEW_ENTRIES) return showViewEntriesScreen();
-    if(section === WRITE_ENTRY) return showAddLogEntryScreen();
+    const showViewEntriesScreen = () => navigate(CustomRoutes.SHOW_LOGS);
+    const showAddLogEntryScreen = () => navigate(CustomRoutes.ADD_LOG_ENTRY);
 
     return <div className="user-home">
-            <div className="left-column" onClick={ () => setSection(Section.VIEW_ENTRIES) }>
+            <div className="left-column" onClick={ () => showViewEntriesScreen() }>
                 <div className="content">
                     <CgTranscript />
                     <p>View entries</p>
                 </div>
             </div>
-            <div className="right-column" onClick={ () => setSection(Section.WRITE_ENTRY) }>
+            <div className="right-column" onClick={ () => showAddLogEntryScreen() }>
                 <div className="content">
                     <BiMessageAdd/>
                     <p>Add a new entry</p>
