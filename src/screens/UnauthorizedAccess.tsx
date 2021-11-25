@@ -1,12 +1,11 @@
-interface UnAuthorizedAccessScreenProps {
-    onClick : () => void
-}
+import { useNavigate } from "react-router";
 
-const UnAuthorizedAccessScreen : React.FC<UnAuthorizedAccessScreenProps> = ({onClick}) => {
+const UnAuthorizedAccessScreen = () => {
+    const navigate = useNavigate();
     return <div className="container text-center">
         <p className="error">Unauthorized Access, please try again.</p>
         <button onClick={() => {
-            if(onClick) onClick();
+            navigate("/", { replace: true});
         }}>Go Back</button>
     </div>
 }
