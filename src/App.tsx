@@ -18,6 +18,7 @@ function App() {
     const showSetupScreen = () => navigate(REGISTER);
     const showLoginScreen = () => navigate(LOGIN);
     
+    CustomStorage.setKeyValue(Key.AUTHENTICATED, "false");
     const hasPin = CustomStorage.hasKey(Key.PIN);
 
     !hasPin ? showSetupScreen() : showLoginScreen()
