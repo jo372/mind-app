@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import PinInput from "../components/Pin/PinInput";
+import PinInput from "../components/Pin/PinInput/PinInput";
 import CustomRoutes from "../lib/CustomRoutes";
 import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
