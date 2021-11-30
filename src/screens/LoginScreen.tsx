@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router";
-import PinConfirmation from "../components/Pin/PinConfirmation";
+import PinConfirmation from "../components/Pin/PinConfirmation/PinConfirmation";
 import CustomRoutes from "../lib/CustomRoutes";
 import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
