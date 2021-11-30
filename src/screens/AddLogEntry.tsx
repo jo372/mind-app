@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { useNavigate } from "react-router";
 import CustomRoutes from "../lib/CustomRoutes";
@@ -6,6 +6,16 @@ import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
 import Weather from "../lib/Weather";
 import User from "../lib/User";
+
+const messages = [
+    "How are you feeling?",
+    "What's up?",
+    "What's going on?",
+    "What's going on today?",
+    "How are you feeling today?",
+    "How are things going?",
+    "How are you?",
+]
 
 const AddLogEntryScreen = () => {
     const navigate = useNavigate();
@@ -21,6 +31,11 @@ const AddLogEntryScreen = () => {
         )
     }, [navigate]);
     
+    const generateRandomMessage = () => {
+        const randomIndex = Math.floor(Math.random() * messages.length);
+        return messages[randomIndex];
+    }
+
     const displayLatLong = () => {
         return <p>
             {   
@@ -38,6 +53,9 @@ const AddLogEntryScreen = () => {
         <h1>Add Log Entry</h1>
         <div className="container">
            { displayLatLong() }
+           <textarea className="mood-entry-details" placeholder={
+               React.useMemo(() => generateRandomMessage(), [])
+            }></textarea>
         </div>
     </div>
 }
