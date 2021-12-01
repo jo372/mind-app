@@ -23,7 +23,8 @@ const AddLogEntryScreen = () => {
     const [error, setError] = useState<string | undefined>(undefined);
 
     useEffect(() => {
-        if(CustomStorage.getValueByKey(Key.AUTHENTICATED) === "false") navigate(CustomRoutes.LOGIN);
+        if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
+        if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN);
         
         User.askForUserLocation(
             (position: GeolocationPosition) => setUserCoord(position), 
