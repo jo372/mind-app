@@ -11,8 +11,8 @@ const UserHomeScreen = () => {
     const navigate = useNavigate();
 
     useEffect(() => { 
-
-        if(CustomStorage.getValueByKey(Key.AUTHENTICATED) === "false") navigate(CustomRoutes.LOGIN);
+        if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER);
+        if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN);
 
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLowerCase();

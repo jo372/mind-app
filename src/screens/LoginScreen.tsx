@@ -9,6 +9,7 @@ const LoginScreen = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
+        if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         if(CustomStorage.getValueByKey(Key.AUTHENTICATED) === "true") navigate(CustomRoutes.HOME);
     });
 
