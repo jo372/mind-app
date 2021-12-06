@@ -20,10 +20,13 @@ const PinInput : React.FC<PinInputProps> = (props) => {
 
     useEffect(() => {
         const body = document.body;
+        const valid_keys = ["backspace", "enter", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLocaleLowerCase();
-            const pinKey : HTMLButtonElement | null = document.querySelector(`#pin_button_${key}`);
-            pinKey?.click();
+            if(valid_keys.includes(key)) {
+                const pinKey : HTMLButtonElement | null = document.querySelector(`#pin_button_${key}`);
+                pinKey?.click();
+            }
         }
         body.addEventListener("keydown", onKeyDown);
         return () =>  body.removeEventListener('keydown', onKeyDown);
