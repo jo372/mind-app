@@ -1,6 +1,8 @@
 # Mind App
 
-at the ROOT of the application you'll find a .env. Please fill in your API_KEY from https://openweathermap.org
+at the ROOT of the application you'll will need to create an .env file. There is an example in .env.example which can be used as a template then remove the .example extension.
+
+Please fill in your WEATHER_API_KEY from https://openweathermap.org
 
 ## Available Scripts
 
