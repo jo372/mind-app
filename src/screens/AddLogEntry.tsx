@@ -29,7 +29,7 @@ const AddLogEntryScreen = () => {
         if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN);
         
-        User.askForUserLocation(
+        User.askForLocation(
             (position: GeolocationPosition) => setUserCoord(position), 
             (positionError: GeolocationPositionError) => setError(positionError.message)
         )
@@ -71,15 +71,22 @@ const AddLogEntryScreen = () => {
             const iconId = weatherData.weather.icon;
             const weatherDescription = weatherData.weather.description;
             const tempature = weatherData.main.temp;
-            return <span>
-                <img src={`https://openweathermap.org/img/wn/${iconId}@2x.png`} alt={weatherDescription} />
-                <p>{locationName}</p>
-                <p>{tempature}&deg;C</p>
-            </span>
-        } else {
-            return <LoadingIcon/>
-        }
+            return <div className="weatherDetails">
+                <span id="locationName">{locationName}</span>
+                <span id="temperature">, {tempature}&deg;C</span>
+                <img id="weatherIcon" data-iconid={iconId} src={`https://openweathermap.org/img/wn/${iconId}@2x.png`} alt={weatherDescription} />
+            </div>
+        } 
+        return error ? <p>{error}</p> : <LoadingIcon/>;
     };
+
+    const createEntry : React.MouseEventHandler<HTMLButtonElement | undefined>  = () => {
+        // const locationName = document.querySelector("#locationName")?.textContent;
+        // const weatherIcon = document.querySelector("#weatherIcon")?.dataset?.iconId;
+        const locationName = document.querySelector("#locationName");
+        const weatherIcon = document.querySelector("#weatherIcon");
+        console.log(locationName, weatherIcon);
+    }
 
     return <div className="container text-center">
         <button className="back-button" onClick={() => navigate(CustomRoutes.HOME)}>
@@ -92,7 +99,7 @@ const AddLogEntryScreen = () => {
            <textarea className="mood-entry-details" placeholder={
                React.useMemo(() => generateRandomMessage(), [])
             }></textarea>
-            <button className="btn right">Add Entry</button>
+            <button className="btn right" onClick={createEntry}>Add Entry</button>
         </div>
     </div>
 }
