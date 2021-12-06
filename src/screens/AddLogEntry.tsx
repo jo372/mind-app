@@ -6,6 +6,7 @@ import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
 import Weather from "../lib/Weather";
 import User from "../lib/User";
+import MoodSelector, { Mood } from "../components/MoodSelector/MoodSelector";
 
 const messages = [
     "How are you feeling?",
@@ -54,9 +55,11 @@ const AddLogEntryScreen = () => {
         <h1>Add Log Entry</h1>
         <div className="container">
            { displayLatLong() }
+           <MoodSelector onClick={(mood: Mood | undefined) => console.log(mood)}/>
            <textarea className="mood-entry-details" placeholder={
                React.useMemo(() => generateRandomMessage(), [])
             }></textarea>
+            <button className="btn right">Add Entry</button>
         </div>
     </div>
 }
