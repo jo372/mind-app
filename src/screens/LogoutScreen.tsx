@@ -8,11 +8,11 @@ const LogoutScreen = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
-        if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN); 
+        if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         CustomStorage.setKeyValue(Key.AUTHENTICATED, "false");
         navigate("/");
-    }, [])
+    }, [navigate])
 
     return <div>
         <p>Logging out...</p>
