@@ -190,9 +190,31 @@ html, body {
   justify-content: center;
 }
 
-.mood-entry-message {
-
+.loading {
+  font-size: 2em;
+  animation: spin 1s linear infinite;
 }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+
 /* Mobile first queries */
 
 /* Larger than mobile */
