@@ -155,7 +155,7 @@ html, body {
 .btn.mood {
   --width: 100px;
   --height: 100px;
-  margin:0;
+  margin:0 auto;
   border:0;
   padding:0;
   background-color: transparent;
@@ -172,6 +172,7 @@ html, body {
   background-color: #7975ff;
   color:#fff;
   transform: translateY(-10px) rotate(45deg);
+  margin-top:20px;
 }
 
 .btn.mood:hover:not(.active) {
@@ -186,7 +187,7 @@ html, body {
 
 .mood-selector {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -199,6 +200,20 @@ html, body {
   display:flex;
   justify-content: center;
   align-items: center;
+  margin-top:20px;
+  margin-bottom:20px;
+  flex-direction: column;
+}
+
+#weatherIcon {
+  background-color: #222;
+  border-radius: 100%;
+  max-width: 50px;
+  margin-left:10px;
+}
+
+#temperature {
+  margin-left: 10px;
 }
 
 @keyframes spin {
@@ -228,6 +243,15 @@ html, body {
 
 /* Larger than phablet */
 @media (min-width: 550px) {
+  .weatherDetails, .mood-selector {
+    flex-direction: row;
+  }
+  .btn.mood {
+    margin:0;
+  }
+  .btn.mood.active {
+    margin-top:0;
+  }
 }
 
 /* Larger than tablet */
