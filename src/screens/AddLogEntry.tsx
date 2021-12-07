@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { useNavigate } from "react-router";
+import { NavigateFunction, useNavigate } from "react-router";
 import CustomRoutes from "../lib/CustomRoutes";
 import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
 import Weather, { WeatherData, WeatherError } from "../lib/Weather";
-import User from "../lib/User";
 import MoodSelector, { Mood } from "../components/MoodSelector/MoodSelector";
 import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
+import WeatherDisplay from "../components/WeatherDisplay/WeatherDisplay";
 
 const messages = [
     "How are you feeling?",
@@ -21,7 +21,6 @@ const messages = [
 
 const AddLogEntryScreen = () => {
     const navigate = useNavigate();
-    const [userCoord, setUserCoord] = useState<GeolocationPosition | undefined >(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [weatherData, setWeatherData] = useState<WeatherData | undefined>(undefined);
 
@@ -29,37 +28,35 @@ const AddLogEntryScreen = () => {
         if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN);
         
-        User.askForLocation(
-            (position: GeolocationPosition) => setUserCoord(position), 
-            (positionError: GeolocationPositionError) => setError(positionError.message)
-        )
-    }, [navigate]);
-
-    useEffect(() => {
-        if(userCoord && !error) {
-            const { latitude: lat, longitude: long } = userCoord.coords;
+        const success = (position: GeolocationPosition) => {
+            // setWeatherData()
+            const { latitude, longitude } = position.coords;
             
-            Weather.fromLatLon(lat, long).then((res : WeatherData | WeatherError) => {
-                if(res instanceof WeatherData) setWeatherData(res);
-                else setError(res.message);
-            });
+            Weather.fromLatLon(latitude, longitude)
+            .then((data: WeatherData | WeatherError) => {
+                if(data instanceof WeatherError) {
+                    setError(data.message);
+                } else {
+                    setWeatherData(data);
+                }
+            })
+            .catch(setError);
         }
-    }, [userCoord]);
-    
+
+        const error = (error: GeolocationPositionError) => {
+            setError(error.message);
+        }
+
+        // navigator.geolocation.getCurrentPosition();
+        navigator.geolocation.getCurrentPosition(success, error, {
+            enableHighAccuracy: true,
+        })
+    }, []);
+
     const generateRandomMessage = () => {
         const randomIndex = Math.floor(Math.random() * messages.length);
         return messages[randomIndex];
     }
-
-    // const displayLatLong = () => {
-    //     return <p>
-    //         {   
-    //             !userCoord && error ? error : 
-    //             !userCoord ? "Loading..." : 
-    //             `${userCoord.coords.latitude} ${userCoord.coords.longitude}`
-    //         }
-    //     </p>
-    // }
 
     const displayWeatherData = () => { 
 
@@ -67,15 +64,11 @@ const AddLogEntryScreen = () => {
         // const locationName = weatherData?.name;
         // console.log(weatherData);
         if(weatherData) {
+            const { icon, description } = weatherData.weather; 
             const locationName = weatherData.name;
-            const iconId = weatherData.weather.icon;
-            const weatherDescription = weatherData.weather.description;
             const tempature = weatherData.main.temp;
-            return <div className="weatherDetails">
-                <span id="locationName">{locationName}</span>
-                <span id="temperature">, {tempature}&deg;C</span>
-                <img id="weatherIcon" data-iconid={iconId} src={`https://openweathermap.org/img/wn/${iconId}@2x.png`} alt={weatherDescription} />
-            </div>
+
+            return <WeatherDisplay iconId={icon} description={description} locationName={locationName} temperature={tempature} />
         } 
         return error ? <p>{error}</p> : <LoadingIcon/>;
     };
@@ -83,9 +76,10 @@ const AddLogEntryScreen = () => {
     const createEntry : React.MouseEventHandler<HTMLButtonElement | undefined>  = () => {
         // const locationName = document.querySelector("#locationName")?.textContent;
         // const weatherIcon = document.querySelector("#weatherIcon")?.dataset?.iconId;
-        const locationName = document.querySelector("#locationName");
-        const weatherIcon = document.querySelector("#weatherIcon");
-        console.log(locationName, weatherIcon);
+        const locationName = document.querySelector("#locationName") as HTMLSpanElement;
+        const weatherIcon = document.querySelector("#weatherIcon") as HTMLImageElement;
+        const moodDescription = document.querySelector("#moodDescription") as HTMLTextAreaElement;
+        console.log(locationName.innerText, weatherIcon.dataset.iconid, moodDescription.value);
     }
 
     return <div className="container text-center">
@@ -95,11 +89,10 @@ const AddLogEntryScreen = () => {
         <h1>Add Log Entry</h1>
         <div className="container">
             { displayWeatherData() }
+            <h2>{React.useMemo(() => generateRandomMessage(), [])}</h2>
            <MoodSelector onClick={(mood: Mood | undefined) => console.log(mood)}/>
-           <textarea className="mood-entry-details" placeholder={
-               React.useMemo(() => generateRandomMessage(), [])
-            }></textarea>
-            <button className="btn right" onClick={createEntry}>Add Entry</button>
+           <textarea id="moodDescription" className="mood-entry-details" placeholder="Add extra details here"></textarea>
+            <button id="addMoodEntryButton" className="btn right" onClick={createEntry}>Add Entry</button>
         </div>
     </div>
 }
