@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import CustomRoutes from "../lib/CustomRoutes";
 import CustomStorage from "../lib/CustomStorage";
 import Key from "../lib/Key";
+import { LogEntry } from "./AddLogEntry";
 
 const ShowLogEntriesScreen = () => {
     const navigate = useNavigate();
@@ -10,6 +11,9 @@ const ShowLogEntriesScreen = () => {
         if(!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER)
         if(CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") navigate(CustomRoutes.LOGIN);
     })
-    return <><p>Show Log Entry Screen</p></>
+    
+
+    const entries = JSON.parse(CustomStorage.getValueByKey(Key.LOG_ENTRIES) ?? "[]");
+    return entries.length === 0 ? "No entries" : entries.map((entry: LogEntry) => <div>{JSON.stringify(entry)}</div>)
 }
 export default ShowLogEntriesScreen;
