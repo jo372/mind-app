@@ -96,11 +96,11 @@ html, body {
 }
 
 .user-home :is(.left-column, .right-column) {
+  --margin: 5px;
   position:relative;
   border:1px solid #ccc;
-  height:100%;
-  width:98%;
-  margin:5px;
+  height: calc(100vh - var(--margin));
+  margin: var(--margin);
   text-align: center;
   cursor: pointer;
 }
