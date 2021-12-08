@@ -117,7 +117,7 @@ html, body {
 }
 
 .back-button {
-  position:absolute;
+  position:fixed;
   left:10px;
   top: 10px;
   border: 1px solid #ccc;
@@ -288,7 +288,7 @@ html, body {
   width:100%;
 }
 
-.modal .modal-footer .btn:nth-child(2) {
+.modal .modal-footer .btn:nth-child(even) {
   background-color: #007bff;
 }
 
