@@ -16,13 +16,20 @@ const UserHomeScreen = () => {
 
         const onKeyDown = ({key}: KeyboardEvent) => {
             key = key.toLowerCase();
-            let el : HTMLDivElement | null = document.querySelector(key === "arrowleft" ? '.left-column' : '.right-column');
-            if(el) { 
-                el.click(); 
-                el.classList.toggle('active');
-                setTimeout(() => { 
-                    el?.classList.toggle('active');
-                }, 100);
+            const keyAllowList = [
+                "arrowleft",
+                "arrowright",
+            ];
+            if(keyAllowList.includes(key)) {
+                const selector = key === "arrowleft" ? '.left-column' : '.right-column';
+                let el : HTMLDivElement | null = document.querySelector(selector);
+                if(el) { 
+                    el.click(); 
+                    el.classList.toggle('active');
+                    setTimeout(() => { 
+                        el?.classList.toggle('active');
+                    }, 100);
+                }
             }
         }
         const body = document.body;
