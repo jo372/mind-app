@@ -216,6 +216,91 @@ html, body {
   margin-left: 10px;
 }
 
+
+.modal {
+  height:100%;
+  top:0;
+  left:0;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+  position:relative;
+  z-index: 2;
+}
+
+.modal .modal-header svg {
+  color: #2c2c2c;
+}
+
+.modal .modal-header {
+  border-radius: 5px 5px 5px 5px;
+  border-bottom:1px solid #ece7e7;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal .modal-header .modal-controls button {
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6em;
+  background-color: transparent;
+  border:0;
+  color: #fff;
+  padding:0;
+}
+
+.modal .modal-header .modal-controls {
+  display:flex;
+  justify-content: flex-end;
+}
+
+.modal .modal-body {
+  border-bottom:1px solid #ece7e7;
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.726);
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index: 1;
+}
+
+.modal .modal-footer {
+  position:relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.modal .modal-footer .btn {
+  padding:10px;
+  border:0;
+  border-radius: 5px;
+  color:#fff;
+  background-color: #5a6268;
+  width:100%;
+}
+
+.modal .modal-footer .btn:nth-child(2) {
+  background-color: #007bff;
+}
+
+.modal .modal-body {
+  /* border-top: 1px solid #171616; */
+}
+
+.hidden {
+  display:none;
+}
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -234,12 +319,21 @@ html, body {
   }
 }
 
-
-
 /* Mobile first queries */
 
 /* Larger than mobile */
-@media (min-width: 400px) {}
+@media (min-width: 400px) {
+  .modal .modal-footer {
+    display:flex;
+    align-items: center;
+    justify-content: end;
+    flex-direction: row;
+  }
+
+  .modal .modal-footer .btn {
+    margin-left: 10px;
+  }
+}
 
 /* Larger than phablet */
 @media (min-width: 550px) {
@@ -251,6 +345,9 @@ html, body {
   }
   .btn.mood.active {
     margin-top:0;
+  }
+  .modal .modal-footer .btn {
+    width: auto;
   }
 }
 
