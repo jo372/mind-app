@@ -9,14 +9,15 @@ import MoodSelector, { Mood } from "../components/MoodSelector/MoodSelector";
 import LoadingIcon from "../components/LoadingIcon/LoadingIcon";
 import WeatherDisplay from "../components/WeatherDisplay/WeatherDisplay";
 import Modal from "../components/Modal/Modal";
+
 export class LogEntry {
   constructor(
-    public time: string,
-    public location: string,
-    public date: string,
-    public weather: WeatherData,
-    public mood: string,
-    public details: string
+    public time: string | undefined,
+    public location: string | undefined,
+    public date: string | undefined,
+    public weather: WeatherData | undefined,
+    public mood: string | undefined,
+    public details: string | undefined
   ) {
     this.time = time;
     this.location = location;
@@ -44,6 +45,7 @@ const AddLogEntryScreen = () => {
   );
   const [currentMood, setCurrentMood] = useState<Mood | undefined>(undefined);
   const [modalMessage, setModalMessage] = useState<string>("");
+  const [modalTitle, setModalTitle] = useState<string>("Alert!");
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const AddLogEntryScreen = () => {
       navigate(CustomRoutes.LOGIN);
     }
     const success = (position: GeolocationPosition) => {
-      // setWeatherData()
+
       const { latitude, longitude } = position.coords;
 
       Weather.fromLatLon(latitude, longitude)
@@ -101,13 +103,41 @@ const AddLogEntryScreen = () => {
 
   const createEntry: React.MouseEventHandler<HTMLButtonElement | undefined> =
     () => {
-      // const locationName = document.querySelector("#locationName")?.textContent;
-      // const weatherIcon = document.querySelector("#weatherIcon")?.dataset?.iconId;
         const mood = document.querySelector('.btn.mood.active') as HTMLButtonElement;
+        const moodDescription = document.querySelector('#moodDescription') as HTMLTextAreaElement;
+
+        const moodDescriptionValue = moodDescription.value.trim() ?? "";
+
         if(!mood) {
+          setModalTitle("Warning!");
           setModalMessage("Please select a mood!");
           setModalVisible(true);
+          return;
         }
+
+        if(moodDescriptionValue.length === 0) {
+          setModalTitle("Warning!");
+          setModalMessage("Please write a description");
+          setModalVisible(true);
+          return;
+        }
+
+        const entry : LogEntry = {
+          time: new Date().toLocaleTimeString(),
+          location: weatherData?.name ?? undefined,
+          date: new Date().toLocaleDateString(),
+          weather: weatherData ?? undefined,
+          mood: currentMood,
+          details: moodDescriptionValue
+        };
+        
+        const previousEntries = CustomStorage.getValueByKey(Key.LOG_ENTRIES) ?? "[]";
+        const entries = JSON.stringify([...JSON.parse(previousEntries), entry]);
+        CustomStorage.setKeyValue(Key.LOG_ENTRIES, entries);
+
+        setModalTitle("Success");
+        setModalMessage("Your entry has been added!");
+        setModalVisible(true);
     };
 
   const hideModal = () => {
@@ -122,7 +152,7 @@ const AddLogEntryScreen = () => {
         <BiArrowBack />
       </button>
       <h1>Add Log Entry</h1>
-      <Modal title="Alert!" content={modalMessage} isHidden={isModalVisible} onClose={hideModal}/>
+      <Modal title={modalTitle} content={modalMessage} isHidden={isModalVisible} onClose={hideModal}/>
       <div className="container">
         {displayWeatherData()}
         <h2>{React.useMemo(() => generateRandomMessage(), [])}</h2>
@@ -145,3 +175,4 @@ const AddLogEntryScreen = () => {
 };
 
 export default AddLogEntryScreen;
+  
