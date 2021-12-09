@@ -1,4 +1,4 @@
-interface WeatherDisplayProps {
+export interface WeatherDisplayProps {
     locationName: string;
     temperature: number;
     description: string;
