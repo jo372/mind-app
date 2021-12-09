@@ -139,6 +139,13 @@ html, body {
   background-color:#ccc;
 }
 
+.mood-entry {
+  border: 1px solid #ccc;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
 .mood-entry-details {
   width:100%;
   box-sizing: border-box;
@@ -204,6 +211,7 @@ html, body {
   margin-top:20px;
   margin-bottom:20px;
   flex-direction: column;
+  margin:0;
 }
 
 #weatherIcon {
@@ -232,6 +240,7 @@ html, body {
   text-align: left;
   position:relative;
   z-index: 2;
+  max-width:500px;
 }
 
 .modal .modal-header svg {
@@ -301,6 +310,48 @@ html, body {
   display:none;
 }
 
+.mood-entry {
+  box-sizing: border-box;
+  padding:10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.mood-entry .mood-entry-date-time {
+  display:flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.mood-entry-mood .btn.mood {
+  margin: 0 auto;
+}
+
+.mood-entry .mood-entry-header {
+  display:flex;
+  justify-content: flex-end;
+}
+
+.mood-entry .mood-entry-header button {
+  --width: 30px;
+  border:0;
+  margin:0; 
+  background-color: transparent;
+  border: 1px solid #ccc;
+  color:#000;
+  width: var(--width);
+  height: var(--width);
+  text-align: center;
+  padding:1px;
+  margin-left:5px;
+  cursor:pointer;
+}
+
+.mood-entry .mood-entry-header button:hover {
+  background-color:#5c5c5c;
+  color:#fff;
+  border-color:#5c5c5c;
+}
 
 @keyframes spin {
   0% {
@@ -327,7 +378,7 @@ html, body {
   .modal .modal-footer {
     display:flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     flex-direction: row;
   }
 
