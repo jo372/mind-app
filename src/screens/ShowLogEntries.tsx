@@ -93,7 +93,7 @@ const ShowLogEntriesScreen = () => {
     
     const showNoEntriesScreen = () => {
         return <div className="container">
-             <p>No Entries</p>
+             <p className="text-center">No Entries available <a href={CustomRoutes.ADD_LOG_ENTRY}>Click Here to create some</a></p>
              <button
         className="back-button"
         onClick={() => navigate(CustomRoutes.HOME)}
