@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 interface ModalProps {
     isHidden?: boolean;
