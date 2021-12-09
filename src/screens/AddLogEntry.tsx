@@ -28,6 +28,11 @@ export class LogEntry {
   }
 }
 
+enum EditMode {
+  CreateEntry,
+  EditEntry
+}
+
 const AddLogEntryScreen = () => {
   const messages = [
     "How are you feeling?",
@@ -47,36 +52,72 @@ const AddLogEntryScreen = () => {
   const [modalMessage, setModalMessage] = useState<string>("");
   const [modalTitle, setModalTitle] = useState<string>("Alert!");
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [addedEntry, setAddedEntry] = useState<boolean>(false);
+  
+  const [mode, setMode] = useState<EditMode>(EditMode.CreateEntry);
+  const [postId, setPostId] = useState<number | undefined>(undefined);
+  const [entryDate, setEntryDate] = useState<string | undefined>(undefined);
+  const [entryTime, setEntryTime] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!CustomStorage.getValueByKey(Key.PIN)) navigate(CustomRoutes.REGISTER);
     if (CustomStorage.getValueByKey(Key.AUTHENTICATED) !== "true") {
       navigate(CustomRoutes.LOGIN);
     }
-    const success = (position: GeolocationPosition) => {
 
-      const { latitude, longitude } = position.coords;
 
-      Weather.fromLatLon(latitude, longitude)
-        .then((data: WeatherData | WeatherError) => {
-          if (data instanceof WeatherError) {
-            setError(data.message);
-          } else {
-            setWeatherData(data);
-          }
-        })
-        .catch(setError);
-    };
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasId = urlParams.has("id");
+    
+    if (!hasId) {
+      const success = (position: GeolocationPosition) => {
 
-    const error = (error: GeolocationPositionError) => {
-      setError(error.message);
-    };
+        const { latitude, longitude } = position.coords;
+  
+        Weather.fromLatLon(latitude, longitude)
+          .then((data: WeatherData | WeatherError) => {
+            if (data instanceof WeatherError) {
+              setError(data.message);
+            } else {
+              setWeatherData(data);
+            }
+          })
+          .catch(setError);
+      };
+  
+      const error = (error: GeolocationPositionError) => {
+        setError(error.message);
+      };
+  
+      navigator.geolocation.getCurrentPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 3000,
+      });
+    } else {
+      let entryId : string | number  | null = urlParams.get("id");
+      if(entryId) {
+        entryId = parseInt(entryId);
+        setMode(EditMode.EditEntry);
+        setPostId(entryId);
+        
+        const entryJSONStr : string | null = CustomStorage.getValueByKey(Key.LOG_ENTRIES);
+        if(entryJSONStr) {
+          const entry = JSON.parse(entryJSONStr)[entryId] as LogEntry;
+          setEntryDate(entry.date);
+          setEntryTime(entry.time);
+          setWeatherData(entry.weather as WeatherData ?? null);
+          setCurrentMood(entry.mood as Mood);
+          setError("Unable to find previous Weather Data");
+          const details = document.querySelector('#moodDescription') as HTMLTextAreaElement;
+          if(details) details.innerText = `${entry.details}`;
+        }
+      } else {
+        navigate(CustomRoutes.ADD_LOG_ENTRY);
+      }
+    }
 
-    navigator.geolocation.getCurrentPosition(success, error, {
-      enableHighAccuracy: true,
-      timeout: 3000,
-    });
-  }, [navigator]);
+    
+  }, [navigate]);
 
   const generateRandomMessage = () => {
     const randomIndex = Math.floor(Math.random() * messages.length);
@@ -123,24 +164,37 @@ const AddLogEntryScreen = () => {
         }
 
         const entry : LogEntry = {
-          time: new Date().toLocaleTimeString(),
+          time: entryTime ? entryTime : new Date().toLocaleTimeString(),
           location: weatherData?.name ?? undefined,
-          date: new Date().toLocaleDateString(),
+          date: entryDate ? entryDate : new Date().toLocaleDateString(),
           weather: weatherData ?? undefined,
           mood: currentMood,
           details: moodDescriptionValue
         };
         
-        const previousEntries = CustomStorage.getValueByKey(Key.LOG_ENTRIES) ?? "[]";
-        const entries = JSON.stringify([...JSON.parse(previousEntries), entry]);
-        CustomStorage.setKeyValue(Key.LOG_ENTRIES, entries);
+        const previousEntries = JSON.parse(CustomStorage.getValueByKey(Key.LOG_ENTRIES) ?? "[]");
+
+        
+        // const entries = JSON.stringify(mode === EditMode.CreateEntry ?  : JSON.parse(previousEntries));
+        let entries : Array<LogEntry> = [...previousEntries];
+        if(postId) {
+          entries[postId] = entry;
+        } else {
+          entries = [...entries, entry];
+        }
+
+        CustomStorage.setKeyValue(Key.LOG_ENTRIES, JSON.stringify(entries));
 
         setModalTitle("Success");
-        setModalMessage("Your entry has been added!");
+        setModalMessage(`Your entry has ${mode === EditMode.CreateEntry ? "been created" : "updated"} successfully!`);
         setModalVisible(true);
+        setAddedEntry(true);
     };
 
   const hideModal = () => {
+    if(addedEntry) {
+      navigate(CustomRoutes.HOME);
+    }
     setModalVisible(false);
   }
   return (
@@ -151,12 +205,14 @@ const AddLogEntryScreen = () => {
       >
         <BiArrowBack />
       </button>
-      <h1>Add Log Entry</h1>
+      
+      { mode === EditMode.CreateEntry ? <h2>Create Log Entry</h2> : <h2>Edit Log Entry</h2> }
+
       <Modal title={modalTitle} content={modalMessage} isHidden={isModalVisible} onClose={hideModal}/>
       <div className="container">
         {displayWeatherData()}
         <h2>{React.useMemo(() => generateRandomMessage(), [])}</h2>
-        <MoodSelector onClick={(mood: Mood | undefined) => setCurrentMood(mood)} />
+        <MoodSelector currentActiveMood={currentMood} onClick={(mood: Mood | undefined) => setCurrentMood(mood)} />
         <textarea
           id="moodDescription"
           className="mood-entry-details"
@@ -167,7 +223,7 @@ const AddLogEntryScreen = () => {
           className="btn right"
           onClick={createEntry}
         >
-          Add Entry
+          {mode === EditMode.CreateEntry ? "Add Entry" : "Update Entry"}
         </button>
       </div>
     </div>
