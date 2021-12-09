@@ -91,7 +91,18 @@ const ShowLogEntriesScreen = () => {
         </div>
     }
     
-    return entries.length === 0 ? <p>No Entries</p> : <div>
+    const showNoEntriesScreen = () => {
+        return <div className="container">
+             <p>No Entries</p>
+             <button
+        className="back-button"
+        onClick={() => navigate(CustomRoutes.HOME)}
+      >
+        <BiArrowBack />
+      </button> 
+        </div>
+    }
+    return entries.length === 0 ? showNoEntriesScreen() : <div>
         { entries.map((entry: LogEntry, idx: number) => createEntry(entry, idx)).reverse()}
         <button
         className="back-button"
