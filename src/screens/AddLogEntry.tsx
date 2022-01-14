@@ -173,18 +173,15 @@ const AddLogEntryScreen = () => {
         };
         
         const previousEntries = JSON.parse(CustomStorage.getValueByKey(Key.LOG_ENTRIES) ?? "[]");
-
+        let entries : Array<LogEntry> = previousEntries;
         
-        // const entries = JSON.stringify(mode === EditMode.CreateEntry ?  : JSON.parse(previousEntries));
-        let entries : Array<LogEntry> = [...previousEntries];
-        if(postId) {
+        if(typeof postId === "number") {
           entries[postId] = entry;
         } else {
           entries = [...entries, entry];
         }
-
+   
         CustomStorage.setKeyValue(Key.LOG_ENTRIES, JSON.stringify(entries));
-
         setModalTitle("Success");
         setModalMessage(`Your entry has ${mode === EditMode.CreateEntry ? "been created" : "updated"} successfully!`);
         setModalVisible(true);
